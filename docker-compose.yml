@@ -3,15 +3,15 @@ version: '3'
 services:
   minio:
     container_name: minio
-    hostname: minio.net
+    hostname: minio
     image: docker.io/bitnami/minio:2022
     ports:
       - '9000:9000'
       - '9001:9001'
     networks:
       - minionetwork
-      - rms_mysql-network
-      - core_template_2_mysql-network
+      - rms_backend
+      - hive_backend
     volumes:
       - 'minio_data:/data'
     environment:
@@ -31,10 +31,9 @@ services:
       - '3306:3306'
     volumes:
       - './docker/mysql/db:/var/lib/mysql'
-      - './docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf'
     networks:
-      - rms_mysql-network
-      - core_template_2_mysql-network
+      - rms_backend
+      - hive_backend
   redis:
     container_name: redis
     hostname: redis
@@ -43,37 +42,33 @@ services:
     ports:
       - '6379:6379'
     networks:
-      - rms_mysql-network
-      - core_template_2_mysql-network
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-    container_name: rabbitmq
-    hostname: rabbitmq-network
-    ports:
-      - 5672:5672
-      - 15672:15672
-    networks:
-      - rabbitmq-network
-
+      - rms_backend
+      - hive_backend
+  # rabbitmq:
+  #   image: rabbitmq:3-management-alpine
+  #   container_name: rabbitmq
+  #   hostname: rabbitmq-network
+  #   ports:
+  #     - 5672:5672
+  #     - 15672:15672
+  #   networks:
+  #     - rabbitmq-network
 networks:
   minionetwork:
     driver: bridge
-  rms_mysql-network:
-    driver: bridge
-    name: rms_mysql-network
-    external: true
-  core_template_2_mysql-network:
-    driver: bridge
-    name: rms_mysql-network
-    external: true
   redis-network:
     driver: bridge
     name: redis-network
     external: true
+  rms_backend:
+    driver: bridge
+    external: true
+  hive_backend:
+    driver: bridge
+    external: true
   rabbitmq-network:
     driver: bridge
     name: rabbitmq-network
-
 volumes:
   minio_data:
     driver: local
