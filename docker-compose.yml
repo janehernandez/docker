@@ -10,8 +10,6 @@ services:
       - '9001:9001'
     networks:
       - minionetwork
-      - rms_backend
-      - hive_backend
     volumes:
       - 'minio_data:/data'
     environment:
@@ -31,9 +29,6 @@ services:
       - '3306:3306'
     volumes:
       - './docker/mysql/db:/var/lib/mysql'
-    networks:
-      - rms_backend
-      - hive_backend
   redis:
     container_name: redis
     hostname: redis
@@ -41,30 +36,21 @@ services:
     command: redis-server
     ports:
       - '6379:6379'
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    hostname: rabbitmq-network
+    ports:
+      - 5672:5672
+      - 15672:15672
     networks:
-      - rms_backend
-      - hive_backend
-  # rabbitmq:
-  #   image: rabbitmq:3-management-alpine
-  #   container_name: rabbitmq
-  #   hostname: rabbitmq-network
-  #   ports:
-  #     - 5672:5672
-  #     - 15672:15672
-  #   networks:
-  #     - rabbitmq-network
+      - rabbitmq-network
 networks:
   minionetwork:
     driver: bridge
   redis-network:
     driver: bridge
     name: redis-network
-    external: true
-  rms_backend:
-    driver: bridge
-    external: true
-  hive_backend:
-    driver: bridge
     external: true
   rabbitmq-network:
     driver: bridge

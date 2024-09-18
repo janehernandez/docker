@@ -2,7 +2,7 @@ DOCKER_REDIS_CONTAINER   := redis
 
 .SILENT: hello
 hello:
-	echo Welcome to RMS make system!
+	echo Welcome to Docker make system!
 
 up: 
 	docker-compose up -d
@@ -15,9 +15,6 @@ cc:
 
 down:
 	docker-compose down
-
-up-rms:up
-	cd ../complaint_tracker && make up
 
 redis-cli:
 	docker-compose exec ${DOCKER_REDIS_CONTAINER} redis-cli || true
