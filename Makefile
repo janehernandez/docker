@@ -7,6 +7,9 @@ hello:
 up: 
 	docker-compose up -d
 
+build:
+	docker-compose build --no-cache
+
 up-minio: 
 	docker-compose up -d minio
 

@@ -43,6 +43,9 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+    environment:
+      - RABBITMQ_USER=USER
+      - RABBITMQ_PASSWORD=PASSWORD
     networks:
       - rabbitmq-network
 networks:
